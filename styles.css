@@ -1,0 +1,88 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  border-bottom: 1px solid black;
+  padding: 15px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.brand {
+  font-size: 40px;
+}
+
+.info-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreboard {
+  max-width: 295px;
+  margin: 30px auto;  /* used to horizontally center an element within its parent container. 0 means no margin at the top or bottom of the element. Auto is used for the left and right margins, and it tells the browser to distribute the horizontal space evenly between the left and right margins; centering the element horizontally within its parent container. */
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 20px;
+  column-gap: 20px;
+  justify-content: center;
+  align-content: center;  /* Aligns entire content of a container along the cross-axis. It affects spacing between rows or columns of items when there is extra space in the container. */
+}
+
+.scoreboard-letter {
+  border: 1px solid black;
+  height: 45px;
+  width: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;  /* aligns child elements within a container along the cross-axis (the perpendicular axis to the main axis. In a flex container, the main axis is typically horizontal, and the cross-axis is vertical. */
+  justify-content: center;
+}
+
+.spiral {
+  font-size: 40px;
+  animation: spin 1.5s linear infinite;
+}
+
+.correct {
+  background-color: green;
+  color: white;
+}
+
+.close {
+  background-color: orange;
+  color: white;
+}
+
+.wrong {
+  background-color: gray;
+  color: white;
+}
+
+.invalid {
+  animation: flash 1s;
+}
+
+/* flashes red border, then fades back to gray */
+@keyframes flash {
+  5% {
+    border-color: crimson;
+  }
+
+  100% {
+    border-color: #ccc;
+  }
+}
+
+.hidden {
+  visibility: hidden;
+}
