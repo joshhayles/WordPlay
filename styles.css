@@ -18,12 +18,6 @@ body {
   font-size: 40px;
 }
 
-.info-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .scoreboard {
   max-width: 295px;
   margin: 30px auto;  /* used to horizontally center an element within its parent container. 0 means no margin at the top or bottom of the element. Auto is used for the left and right margins, and it tells the browser to distribute the horizontal space evenly between the left and right margins; centering the element horizontally within its parent container. */
@@ -46,11 +40,6 @@ body {
   display: flex;
   align-items: center;  /* aligns child elements within a container along the cross-axis (the perpendicular axis to the main axis. In a flex container, the main axis is typically horizontal, and the cross-axis is vertical. */
   justify-content: center;
-}
-
-.spiral {
-  font-size: 40px;
-  animation: spin 1.5s linear infinite;
 }
 
 .correct {
