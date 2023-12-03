@@ -22,10 +22,9 @@ Error in console:
 
 - This can happen when using Async/Await functionality in combination with event listeners. It's saying that the event listener is not waiting for the async operation to complete before moving on. In my case, I was originally calling the function inside my async init() like this: fetchWordOfTheDay();
     
-- However, by changing that to this:
+- However, by changing that to this, the error in the console went away:
   ```javascript
     const wordOfTheDay = await function fetchWordOfTheDay();
-    the error in the console went away. 
 
 - This change to: `const wordOfTheDay = await function fetchWordOfTheDay();` was necessary because fetchWordOfTheDay() is an asynchronous function that returns a promise. The 'await' keyword is used to wait for that promise to resolve and to get the value returned by the promise (it pauses the execution of the init() function until the promise returned by fetchWordOfTheDay() is resolved). In other words, it's waiting for the result of the asynchronous 'fetch' operation inside the fetchWordOfTheDay() function.
 
