@@ -18,6 +18,7 @@ async function fetchWordOfTheDay() {
     const data = await response.json();
     const wordOfTheDay = data.word;
     console.log(wordOfTheDay);
+    return wordOfTheDay;
   } catch (error) {
     console.error(error);
   }
@@ -27,8 +28,8 @@ async function fetchWordOfTheDay() {
 // event.key is a property of the KeyboardEvent object in JavaScript that holds the value of the key being pressed
 
 async function init() {
-  // fetch word of the day
-  fetchWordOfTheDay();
+  // fetch word of the day using await
+  const wordOfTheDay = await fetchWordOfTheDay();
 
   document.addEventListener("keydown", function (event) {
     console.log(event.key);

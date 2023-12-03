@@ -14,3 +14,14 @@ Once they run out of chances, and still have not guessed the word, they receive 
   When using document.querySelectorAll("scoreboard-letter") to select the HTML element "scoreboard-letter" it provides you with a NodeList[ ]. This selector returns all matching elements.
 
   When using document.querySelector(), it will select the first element that matches a specified selector, and will only return the first matching element, even if multiple elements match. Returns 'null' if no elements are found.
+
+# Troubleshooting
+  Error in console: "Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received."
+
+    - This can happen when using Async/Await functionality in combination with event listeners. It's saying that the event listener is not waiting for the async operation to complete before moving on. In my case, I was originally calling the function inside my async init() like this: fetchWordOfTheDay();
+    
+    - However, by changing that to this: 
+    const wordOfTheDay = await function fetchWordOfTheDay();
+    the error in the console went away. 
+
+    - This change to: const wordOfTheDay = await function fetchWordOfTheDay(); was necessary because fetchWordOfTheDay() is an asynchronous function that returns a promise. The 'await' keyword is used to wait for that promise to resolve and to get the value returned by the promise. In this case, it's waiting for the result of the asynchronous 'fetch' operation inside the fetchWordOfTheDay() function.
