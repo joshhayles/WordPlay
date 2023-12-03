@@ -1,6 +1,8 @@
 // declare some variables
 const rowLength = 5;
 let currentPosition = 0; // keep track of current position
+let numberOfRows = 6;
+let maxTries = rowLength * numberOfRows
 
 // select scoreboard-letter class
 const lettersContainer = document.querySelector(".scoreboard-letter");
@@ -22,9 +24,9 @@ document.addEventListener("keydown", function (event) {
   currentPosition++;
   console.log(currentPosition);
 
-  // check rowLength to see if it's been reached
-  if (currentPosition % rowLength === 0) {
-    // reset currentPosition for new row
-    currentPosition = 0;
+  if (currentPosition === maxTries) {
+    console.log(currentPosition);
+    alert(`Sorry, you lose.`);
   }
+
 });
