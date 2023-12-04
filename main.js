@@ -24,33 +24,41 @@ async function fetchWordOfTheDay() {
   }
 }
 
-// set up event listeners with init() function
-// event.key is a property of the KeyboardEvent object in JavaScript that holds the value of the key being pressed
+function updateCurrentLetterElement(letter) {
+  // get the current letter element based on the currentPosition
+  const currentLetterElement = document.getElementById(
+    `letter-${currentPosition}`
+  );
+
+  // update content of current letter element
+  currentLetterElement.textContent = letter;
+}
+
+function handleKeyDown(event) {
+  console.log(event.key);
+
+  // call function
+  updateCurrentLetterElement(event.key);
+
+  // increment current position
+  currentPosition++;
+  console.log(currentPosition);
+
+  if (currentPosition === maxTries) {
+    console.log(currentPosition);
+    alert(`Sorry, you lose.`);
+  }
+}
 
 async function init() {
+  // initialize the game for a starting point
+  let currentGuess = "";
+  let currentRow = 0;
+
   // fetch word of the day using await
   const wordOfTheDay = await fetchWordOfTheDay();
-
-  document.addEventListener("keydown", function (event) {
-    console.log(event.key);
-
-    // get the current letter element based on the currentPosition
-    const currentLetterElement = document.getElementById(
-      `letter-${currentPosition}`
-    );
-
-    // update content of current letter element
-    currentLetterElement.textContent = event.key;
-
-    // increment current position
-    currentPosition++;
-    console.log(currentPosition);
-
-    if (currentPosition === maxTries) {
-      console.log(currentPosition);
-      alert(`Sorry, you lose.`);
-    }
-  });
 }
+
+document.addEventListener("keydown", handleKeyDown);
 
 init();
