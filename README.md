@@ -20,13 +20,9 @@ Error in console:
 
 "Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received."
 
-- This can happen when using Async/Await functionality in combination with event listeners. It's saying that the event listener is not waiting for the async operation to complete before moving on. In my case, I was originally calling the function inside my async init() like this: fetchWordOfTheDay();
-    
-- However, by changing that to this, the error in the console went away:
-  ```javascript
-    const wordOfTheDay = await function fetchWordOfTheDay();
+- This can happen when using Async/Await functionality in combination with event listeners. It's saying that the event listener is not waiting for the async operation to complete before moving on. This usually happens when a function is expected to return a response to another function asynchronously, but the connection closed before the response is sent.
 
-- This change to: `const wordOfTheDay = await function fetchWordOfTheDay();` was necessary because fetchWordOfTheDay() is an asynchronous function that returns a promise. The 'await' keyword is used to wait for that promise to resolve and to get the value returned by the promise (it pauses the execution of the init() function until the promise returned by fetchWordOfTheDay() is resolved). In other words, it's waiting for the result of the asynchronous 'fetch' operation inside the fetchWordOfTheDay() function.
+- In my case, I needed to add a 'return' statement to my 'playTheGame()' function, and the error was resolved. 
 
-- Once the promise is resolved, the value is assigned to the variable 'wordOfTheDay', which is the actual word fetched, and can now be used in the code.
+- Without the return statement, this leads the browser to think it will eventually send a response asynchronously, hence the 'true' return value. Otherwise, it marks the function as "in progress" and keeps the communication channel open, waiting for the response. And since my playTheGame() function is not an asynchronous operation, it doesn't send back a response. And eventually, the browser closes the communication channel, and submits the error message.
 

@@ -7,6 +7,7 @@ let maxTries = rowLength * numberOfRows;
 // select scoreboard-letter class
 const lettersContainer = document.querySelector(".scoreboard-letter");
 
+// fetch word of the day
 async function fetchWordOfTheDay() {
   try {
     const response = await fetch(
@@ -24,29 +25,33 @@ async function fetchWordOfTheDay() {
   }
 }
 
-function updateCurrentLetterElement(letter) {
+function handleKeyDown(event) {
+  const letter = event.key;
+  //console.log(letter, currentPosition);
+
   // get the current letter element based on the currentPosition
   const currentLetterElement = document.getElementById(
     `letter-${currentPosition}`
   );
 
-  // update content of current letter element
+  // add letter to UI
   currentLetterElement.textContent = letter;
-}
-
-function handleKeyDown(event) {
-  console.log(event.key);
-
-  // call function
-  updateCurrentLetterElement(event.key);
 
   // increment current position
   currentPosition++;
-  console.log(currentPosition);
 
-  if (currentPosition === maxTries) {
-    console.log(currentPosition);
-    alert(`Sorry, you lose.`);
+  playTheGame(letter, currentLetterElement, currentPosition);
+}
+
+function playTheGame(letter, currentLetterElement, currentPosition) {
+  console.log(`Letter: ${letter}, Letter Element: ${currentLetterElement}, Current Position: ${currentPosition}`);
+
+  if (currentPosition == maxTries) {
+    //console.log(currentPosition);
+    alert(`Sorry. You lose.`);
+    return;
+  } else {
+    //
   }
 }
 
@@ -57,8 +62,9 @@ async function init() {
 
   // fetch word of the day using await
   const wordOfTheDay = await fetchWordOfTheDay();
-}
 
-document.addEventListener("keydown", handleKeyDown);
+  // add event listener and call handleKeyDown
+  document.addEventListener("keydown", (event) => handleKeyDown(event));
+}
 
 init();
