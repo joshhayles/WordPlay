@@ -55,22 +55,3 @@ body {
   background-color: gray;
   color: white;
 }
-
-.invalid {
-  animation: flash 1s;
-}
-
-/* flashes red border, then fades back to gray */
-@keyframes flash {
-  5% {
-    border-color: crimson;
-  }
-
-  100% {
-    border-color: #ccc;
-  }
-}
-
-.hidden {
-  visibility: hidden;
-}

@@ -4,10 +4,10 @@ let currentPosition = 0; // keep track of current position
 const numberOfRows = 6;
 const maxTries = rowLength * numberOfRows;
 
-// select scoreboard-letter class
+// select the HTML element with class 'scoreboard-letter' and assign it to lettersContainer
 const lettersContainer = document.querySelector(".scoreboard-letter");
 
-// create Arrays (with a length the same as numberOfRows) for storing the letters to help define each row, and each completed guess
+// create Arrays (with a length the same as numberOfRows) for storing the user's input and guesses
 const rows = Array.from({ length: numberOfRows }, () => []);
 const guesses = Array.from({ length: numberOfRows }, () => []);
 
@@ -31,12 +31,14 @@ async function fetchWordOfTheDay() {
   }
 }
 
+// a function that takes in the keyboard event as a parameter and extracts the key that was pressed. It then calls the playTheGame() function to handle the game logic
 function handleKeyDown(event) {
   const letter = event.key;
 
   playTheGame(letter);
 }
 
+// a function for the game's primary logic
 function playTheGame(letter) {
   // initialize the game for a starting point
   let guessNumber = 1;
@@ -50,22 +52,27 @@ function playTheGame(letter) {
   // add letter to UI
   currentLetterElement.textContent = letter;
 
-  // add letter to the current row
+  // add (push) the letter to the current row
   rows[currentRow - 1].push(letter);
   console.log(rows);
+
+  // check if user's letter is in wordOfTheDay. If true, change background to green
+  const letterInWordOfDay = wordOfTheDay.includes(letter);
+
+  if (letterInWordOfDay) {
+    currentLetterElement.style.backgroundColor = "green";
+  }
 
   // increment current position
   currentPosition++;
 
   // check to see if currentPosition is a multiple of rowLength (for filling up the row)
   if (currentPosition % rowLength === 0) {
-
-    // save their guess to the guesses Array, then increment guessNumber
-    // this next line copies the contents of the current row: rows[guessNumber - 1], into the corresponding position of the guesses array
+    // save their guess to the guesses Array
+    // copy the contents of the current row: rows[guessNumber - 1], into the corresponding position of the guesses array
     // slice is used to create a shallow copy of the array so the changes don't affect the other
-    // subtracting 1 is necessary because guessNumber starts at 1, so when accessing the arrays 'guesses' and 'rows,' subtracting 1 is necessary because those arrays start at 0
+    // subtracting 1 is necessary because guessNumber starts at 1
     guesses[guessNumber - 1] = rows[guessNumber - 1].slice();
-    console.log(guesses);
     guessNumber++;
   }
 
