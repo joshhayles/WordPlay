@@ -9,6 +9,9 @@ Once they run out of chances, and still have not guessed the word, they receive 
 
 ## 2.0 version (Coming Soon)
 
+- Show the wordOfTheDay definition to the user for a better hint
+- Color the letter backgrounds different colors based on the user's input
+
 # What I'm Learning
 
 - When using document.querySelectorAll("scoreboard-letter") to select the HTML element "scoreboard-letter" it provides you with a NodeList[ ]. This selector returns all matching elements.
