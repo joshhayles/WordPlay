@@ -57,8 +57,13 @@ function playTheGame(letter) {
   // increment current position
   currentPosition++;
 
+  // check to see if currentPosition is a multiple of rowLength (for filling up the row)
   if (currentPosition % rowLength === 0) {
+
     // save their guess to the guesses Array, then increment guessNumber
+    // this next line copies the contents of the current row: rows[guessNumber - 1], into the corresponding position of the guesses array
+    // slice is used to create a shallow copy of the array so the changes don't affect the other
+    // subtracting 1 is necessary because guessNumber starts at 1, so when accessing the arrays 'guesses' and 'rows,' subtracting 1 is necessary because those arrays start at 0
     guesses[guessNumber - 1] = rows[guessNumber - 1].slice();
     console.log(guesses);
     guessNumber++;
@@ -81,7 +86,10 @@ function checkIfUserWins() {
   const userWord = guesses.flat().join("");
 
   if (userWord === wordOfTheDay) {
-    alert(`You win!!`);
+    // delay alert by 100 milliseconds to make sure the last letter shows up
+    setTimeout(() => {
+      alert(`You win!!`);
+    }, 100);
   } else {
     return;
   }
