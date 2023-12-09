@@ -90,7 +90,7 @@ async function playTheGame(letter) {
 
 async function checkIfUserWins(guessNumber) {
   // join the letters to form the user's word
-  const userWord = rows[guessNumber].join("");
+  const userWord = rows[guessNumber - 1].join("");
 
   if (userWord == wordOfTheDay) {
     alert(`You win!! Look how talented you are!`);
