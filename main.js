@@ -3,6 +3,8 @@ const rowLength = 5;
 let currentPosition = 0; // keep track of current position
 const numberOfRows = 6;
 const maxTries = rowLength * numberOfRows;
+let guessNumber = 0;
+let currentRow = 0;
 
 // select the HTML element with class 'scoreboard-letter' and assign it to lettersContainer
 const lettersContainer = document.querySelector(".scoreboard-letter");
@@ -39,11 +41,7 @@ function handleKeyDown(event) {
 }
 
 // a function for the game's primary logic
-function playTheGame(letter) {
-  // initialize the game for a starting point
-  let guessNumber = 1;
-  let currentRow = 1;
-
+async function playTheGame(letter) {
   // get the current letter element based on the currentPosition
   const currentLetterElement = document.getElementById(
     `letter-${currentPosition}`
@@ -53,7 +51,7 @@ function playTheGame(letter) {
   currentLetterElement.textContent = letter;
 
   // add (push) the letter to the current row
-  rows[currentRow - 1].push(letter);
+  rows[currentRow].push(letter);
   console.log(rows);
 
   // check if user's letter is in wordOfTheDay. If true, change background to green
@@ -69,18 +67,20 @@ function playTheGame(letter) {
   // check to see if currentPosition is a multiple of rowLength (for filling up the row)
   if (currentPosition % rowLength === 0) {
     // save their guess to the guesses Array
-    // copy the contents of the current row: rows[guessNumber - 1], into the corresponding position of the guesses array
+    // copy the contents of the current row: rows[guessNumber], into the corresponding position of the guesses array
     // slice is used to create a shallow copy of the array so the changes don't affect the other
-    // subtracting 1 is necessary because guessNumber starts at 1
-    guesses[guessNumber - 1] = rows[guessNumber - 1].slice();
+    guesses[guessNumber] = rows[guessNumber].slice();
     guessNumber++;
+    currentRow++;
   }
 
-  if (currentPosition == maxTries) {
-    alert(`Sorry. You lose`);
-    return;
-  } else {
-    checkIfUserWins();
+  if (currentRow === numberOfRows && currentPosition === maxTries) {
+    const didWin = await checkIfUserWins(guessNumber);
+
+    if (didWin) {
+      alert(`You win!! Look how talented you are!`);
+      return;
+    }
   }
 
   console.log(
@@ -88,23 +88,21 @@ function playTheGame(letter) {
   );
 }
 
-function checkIfUserWins() {
+async function checkIfUserWins(guessNumber) {
   // join the letters to form the user's word
-  const userWord = guesses.flat().join("");
+  const userWord = rows[guessNumber].join("");
 
-  if (userWord === wordOfTheDay) {
-    // delay alert by 100 milliseconds to make sure the last letter shows up
-    setTimeout(() => {
-      alert(`You win!!`);
-    }, 100);
+  if (userWord == wordOfTheDay) {
+    alert(`You win!! Look how talented you are!`);
+    return true;
   } else {
-    return;
+    return false;
   }
 }
 
 async function init() {
   // fetch word of the day using await
-  const wordOfTheDay = await fetchWordOfTheDay();
+  wordOfTheDay = await fetchWordOfTheDay();
 
   // add event listener and call handleKeyDown
   document.addEventListener("keydown", (event) => handleKeyDown(event));
