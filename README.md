@@ -7,15 +7,18 @@ If they guess correctly, the row lights up in green.
 
 Once they run out of chances, and still have not guessed the word, they receive an alert stating they have lost.
 
-## 2.0 version (Coming Soon)
+## 2.0 version (Future Project Additions)
 
-- Show the wordOfTheDay definition to the user for a better hint
+- Show the wordOfTheDay definition to the user for a hint (use a dictionary definition API)
+- Give the user the option to "refresh" the game with a button
 
 # What I'm Learning
 
 - When using document.querySelectorAll("scoreboard-letter") to select the HTML element "scoreboard-letter" it provides you with a NodeList[ ]. This selector returns all matching elements.
 
 - When using document.querySelector(), it will select the first element that matches a specified selector, and will only return the first matching element, even if multiple elements match. Returns 'null' if no elements are found.
+
+- Learned a lot about async / await, order of operations, scope, waiting on promises
 
 # Troubleshooting
 Error in console:

@@ -5,11 +5,12 @@ const numberOfRows = 6;
 const maxTries = rowLength * numberOfRows;
 let guessNumber = 0;
 let currentRow = 0;
+let gameOver = false;
 
 // select the HTML element with class 'scoreboard-letter' and assign it to lettersContainer
 const lettersContainer = document.querySelector(".scoreboard-letter");
 
-// create Arrays (with a length the same as numberOfRows) for storing the user's input and guesses
+// create two Arrays (with a length the same as numberOfRows) for storing the user's input and guesses
 const rows = Array.from({ length: numberOfRows }, () => []);
 const guesses = Array.from({ length: numberOfRows }, () => []);
 
@@ -33,74 +34,101 @@ async function fetchWordOfTheDay() {
   }
 }
 
-// a function that takes in the keyboard event as a parameter and extracts the key that was pressed. It then calls the playTheGame() function to handle the game logic
+// a function that takes in the keyboard event as a parameter and extracts the key that was pressed.
 function handleKeyDown(event) {
   const letter = event.key;
 
-  playTheGame(letter);
+  // make sure the key pressed is a letter (or, the command key for opening up dev tools without disrupting the game)
+  // if the key pressed is a letter, or the Command key (metaKey), call playTheGame() function
+  if (/^[a-zA-Z]$/.test(letter) || event.metaKey) {
+    playTheGame(letter);
+  } else {
+    // if any other key is pressed, send alert
+    alert(`Please enter a valid letter A - Z.`)
+  }
 }
 
 // a function for the game's primary logic
 async function playTheGame(letter) {
-  // get the current letter element based on the currentPosition
-  const currentLetterElement = document.getElementById(
-    `letter-${currentPosition}`
-  );
-
-  // add letter to UI
-  currentLetterElement.textContent = letter;
-
-  // add (push) the letter to the current row
-  rows[currentRow].push(letter);
-  console.log(rows);
-
-  // check if user's letter is in wordOfTheDay. If true, change background to green
-  const letterInWordOfDay = wordOfTheDay.includes(letter);
-
-  if (letterInWordOfDay) {
-    currentLetterElement.style.backgroundColor = "green";
+  // check to see if game can be played
+  if (gameOver) {
+    return;
   }
 
-  // increment current position
-  currentPosition++;
+  if (/^[a-zA-Z]$/.test(letter)) {
+    // get the current letter element based on the currentPosition
+    const currentLetterElement = document.getElementById(
+      `letter-${currentPosition}`
+    );
 
-  // check to see if currentPosition is a multiple of rowLength (for filling up the row)
-  if (currentPosition % rowLength === 0) {
-    // save their guess to the guesses Array
-    // copy the contents of the current row: rows[guessNumber], into the corresponding position of the guesses array
-    // slice is used to create a shallow copy of the array so the changes don't affect the other
-    guesses[guessNumber] = rows[guessNumber].slice();
-    guessNumber++;
-    currentRow++;
-  }
+    // add letter to UI
+    currentLetterElement.textContent = letter;
 
-  if (currentRow === numberOfRows && currentPosition === maxTries) {
-    const didWin = await checkIfUserWins(guessNumber);
+    // add (push) the letter to the current row
+    rows[currentRow].push(letter);
 
-    if (didWin) {
-      alert(`You win!! Look how talented you are!`);
-      return;
+    console.log(rows);
+
+    // check if user's letter is in wordOfTheDay. If true, change background to green
+    const letterInWordOfDay = wordOfTheDay.includes(letter);
+
+    if (letterInWordOfDay) {
+      currentLetterElement.style.backgroundColor = "green";
     }
-  }
 
-  console.log(
-    `Letter: ${letter}, Position: ${currentPosition} of ${maxTries}, Guess Number: ${guessNumber} of ${numberOfRows}, Current Row: ${currentRow} of ${numberOfRows}`
-  );
+    // increment current position
+    currentPosition++;
+
+    // if user has exhausted all tries (30 entries) call checkIfUserWins();
+    if (currentPosition === maxTries) {
+      checkIfUserWins();
+    }
+
+    // manage the transition to the next row when the current row is filled up with guesses
+    // calculate the position within the current row by taking the remainder of the division of currentPosition by rowLength.
+    // this determines where the current user input should be placed within the current row
+
+    const positionWithinRow = currentPosition % rowLength;
+
+    // if the row is filled...
+    // if it is filled, copy the contents of the currentRow INTO the guesses Array
+    // using slice creates a shallow copy of the Array (to preserve the original state of the row)
+
+    if (positionWithinRow === 0) {
+      guesses[currentRow] = rows[currentRow].slice();
+      guessNumber++;
+      currentRow++;
+
+      checkIfUserWins();
+    }
+
+    console.log(
+      `Letter: ${letter}, Position: ${currentPosition} of ${maxTries}, Guess Number: ${guessNumber} of ${numberOfRows}, Current Row: ${currentRow} of ${numberOfRows}`
+    );
+  }
 }
 
-async function checkIfUserWins(guessNumber) {
+function checkIfUserWins() {
   // join the letters to form the user's word
-  const userWord = rows[guessNumber - 1].join("");
+  const userWord = guesses[currentRow - 1].join("");
+  console.log(userWord);
 
-  if (userWord == wordOfTheDay) {
-    alert(`You win!! Look how talented you are!`);
-    return true;
-  } else {
-    return false;
+  if (userWord === wordOfTheDay) {
+    setTimeout(() => {
+      alert(`You win, from checkIfUserWins()`);
+      // set flag to true when user loses the game
+      gameOver = true;
+    }, 50);
+  } else if (currentRow >= numberOfRows) {
+    setTimeout(() => {
+      alert(`You lose, from checkIfUserWins()`);
+      gameOver = true;
+    }, 50);
   }
 }
 
 async function init() {
+  console.log(`init() called`);
   // fetch word of the day using await
   wordOfTheDay = await fetchWordOfTheDay();
 
