@@ -20,6 +20,8 @@ Once they run out of chances, and still have not guessed the word, they receive 
 
 - Learned a lot about async / await, order of operations, scope, waiting on promises
 
+- I also learned more about Keboard Events, and code values that come from keys being pressed by the user
+
 # Troubleshooting
 Error in console:
 

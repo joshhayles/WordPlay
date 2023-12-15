@@ -37,8 +37,17 @@ body {
   font-size: 30px;
   font-weight: bold;
   display: flex;
-  align-items: center;  /* aligns child elements within a container along the cross-axis (the perpendicular axis to the main axis. In a flex container, the main axis is typically horizontal, and the cross-axis is vertical. */
+  align-items: center;  /* aligns child elements within a container along the cross-axis */
   justify-content: center;
+}
+
+.alert-enter-valid-letter{
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  background-color: yellow;
+  padding: 15px;
+  visibility: hidden;
 }
 
 .correct {

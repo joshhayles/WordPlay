@@ -1,20 +1,22 @@
-// declare some variables
-const rowLength = 5;
-let currentPosition = 0; // keep track of current position
-const numberOfRows = 6;
-const maxTries = rowLength * numberOfRows;
-let guessNumber = 0;
-let currentRow = 0;
-let gameOver = false;
+// TODO
+// game isn't checking for a win when backspace is used (need to clear things out somehow, or get the new currentPosition from the backspace function)
 
-// select the HTML element with class 'scoreboard-letter' and assign it to lettersContainer
+// prevent the option key from showing up in the alertElement when opening devtools
+
+// declare variables
+const numberOfRows = 6;
+
+// select the HTML elements and assign to variables
 const lettersContainer = document.querySelector(".scoreboard-letter");
 
-// create two Arrays (with a length the same as numberOfRows) for storing the user's input and guesses
+// create an Array (with a length the same as numberOfRows) for storing the user's guesses
 const rows = Array.from({ length: numberOfRows }, () => []);
-const guesses = Array.from({ length: numberOfRows }, () => []);
 
+let currentPosition = 0;
+let currentRow = 0;
+let gameOver = false;
 let wordOfTheDay;
+let defaultWordOfTheDay = "abase";
 
 // fetch word of the day
 async function fetchWordOfTheDay() {
@@ -31,46 +33,87 @@ async function fetchWordOfTheDay() {
     return wordOfTheDay;
   } catch (error) {
     console.error(error);
+    wordOfTheDay = defaultWordOfTheDay;
+    console.log(
+      `Word of the day wasn't available. Using default: ${wordOfTheDay}`
+    );
   }
 }
 
 // a function that takes in the keyboard event as a parameter and extracts the key that was pressed.
 function handleKeyDown(event) {
-  const letter = event.key;
+  const letterCode = event.code;
+  const alertElement = document.querySelector(".alert-enter-valid-letter");
 
-  // make sure the key pressed is a letter (or, the command key for opening up dev tools without disrupting the game)
-  // if the key pressed is a letter, or the Command key (metaKey), call playTheGame() function
-  if (/^[a-zA-Z]$/.test(letter) || event.metaKey) {
+  // hide the alert initially
+  alertElement.style.visibility = "hidden";
+
+  if (
+    letterCode === "MetaLeft" ||
+    (letterCode === "AltLeft" && letterCode === "KeyJ")
+  ) {
+    console.log("Devtools Opened");
+  } else if (letterCode === "Backspace") {
+    handleBackspace();
+    // clear alert message if Backspace is pressed
+    alertElement.textContent = "";
+    alertElement.style.visibility = "hidden";
+  } else if (letterCode >= "KeyA" && letterCode <= "KeyZ") {
+    // extract the letter and play the game
+    const letter = event.key.toLowerCase();
     playTheGame(letter);
+
+    // make sure alert message is cleared when a correct letter is entered
+    alertElement.textContent = "";
+    alertElement.style.visibility = "hidden";
   } else {
-    // if any other key is pressed, send alert
-    alert(`Please enter a valid letter A - Z.`)
+    alertElement.textContent = "Please enter a valid letter: a - z";
+    alertElement.style.visibility = "visible";
+  }
+}
+
+function handleBackspace() {
+  // check if there is a letter to delete first
+  if (currentPosition > 0) {
+    // decrement currentPosition
+    currentPosition--;
+
+    // grab the previous letter element based on the updated currentPosition
+    const previousLetterElement = document.getElementById(
+      `letter-${currentPosition}`
+    );
+    // clear contents of previous letter element
+    previousLetterElement.textContent = "";
+    previousLetterElement.style.backgroundColor = "";
+
+    console.log(`Backspace Position: ${currentPosition}`);
   }
 }
 
 // a function for the game's primary logic
-async function playTheGame(letter) {
+function playTheGame(letter) {
   // check to see if game can be played
   if (gameOver) {
     return;
   }
 
-  if (/^[a-zA-Z]$/.test(letter)) {
+  const lowercaseLetter = letter.toLowerCase();
+
+  if (lowercaseLetter >= "a" && lowercaseLetter <= "z") {
     // get the current letter element based on the currentPosition
     const currentLetterElement = document.getElementById(
       `letter-${currentPosition}`
     );
 
     // add letter to UI
-    currentLetterElement.textContent = letter;
+    currentLetterElement.textContent = lowercaseLetter;
 
     // add (push) the letter to the current row
-    rows[currentRow].push(letter);
-
+    rows[currentRow].push(lowercaseLetter);
     console.log(rows);
 
     // check if user's letter is in wordOfTheDay. If true, change background to green
-    const letterInWordOfDay = wordOfTheDay.includes(letter);
+    const letterInWordOfDay = wordOfTheDay.includes(lowercaseLetter);
 
     if (letterInWordOfDay) {
       currentLetterElement.style.backgroundColor = "green";
@@ -79,38 +122,19 @@ async function playTheGame(letter) {
     // increment current position
     currentPosition++;
 
-    // if user has exhausted all tries (30 entries) call checkIfUserWins();
-    if (currentPosition === maxTries) {
+    if (currentPosition % 5 === 0) {
       checkIfUserWins();
+
+      console.log(
+        `Current Position: ${currentPosition}, Current Row: ${currentRow} of ${numberOfRows}`
+      );
     }
-
-    // manage the transition to the next row when the current row is filled up with guesses
-    // calculate the position within the current row by taking the remainder of the division of currentPosition by rowLength.
-    // this determines where the current user input should be placed within the current row
-
-    const positionWithinRow = currentPosition % rowLength;
-
-    // if the row is filled...
-    // if it is filled, copy the contents of the currentRow INTO the guesses Array
-    // using slice creates a shallow copy of the Array (to preserve the original state of the row)
-
-    if (positionWithinRow === 0) {
-      guesses[currentRow] = rows[currentRow].slice();
-      guessNumber++;
-      currentRow++;
-
-      checkIfUserWins();
-    }
-
-    console.log(
-      `Letter: ${letter}, Position: ${currentPosition} of ${maxTries}, Guess Number: ${guessNumber} of ${numberOfRows}, Current Row: ${currentRow} of ${numberOfRows}`
-    );
   }
 }
 
 function checkIfUserWins() {
   // join the letters to form the user's word
-  const userWord = guesses[currentRow - 1].join("");
+  const userWord = rows[currentRow].join("");
   console.log(userWord);
 
   if (userWord === wordOfTheDay) {
@@ -119,11 +143,14 @@ function checkIfUserWins() {
       // set flag to true when user loses the game
       gameOver = true;
     }, 50);
-  } else if (currentRow >= numberOfRows) {
+  } else if (currentPosition === numberOfRows * 5) {
     setTimeout(() => {
-      alert(`You lose, from checkIfUserWins()`);
+      alert(`You lose!`);
       gameOver = true;
     }, 50);
+  } else {
+    // Move to the next row
+    currentRow++;
   }
 }
 
