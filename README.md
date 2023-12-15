@@ -1,6 +1,9 @@
 # About WordPlay
 
 ## 1.0 version (Completed Dec, 2023)
+
+[Visit a Live DEMO Here](https://joshhayles.github.io/WordPlay/)
+
 WordPlay is a small project that fetches the word of the day from GET https://words.dev-apis.com/word-of-the-day and allows the user 6 chances to guess it. If they guess a letter correctly, the background turns green. They can use those correct guesses as 'hints' and implement them in their remaining chances as they progress forward in the process.
 
 If they guess correctly, the row lights up in green.
