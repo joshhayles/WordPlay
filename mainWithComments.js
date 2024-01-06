@@ -1,13 +1,21 @@
+// declare variables
 const numberOfRows = 6;
 
 // create an Array the same length as numberOfRows for storing the user's guesses
+// this essentially creates 6 empty arrays, representing the 6 rows
 const rows = Array.from({ length: numberOfRows }, () => []);
+
+// further explained:
+  // Array.from is an available javascript method used to create a new array
+  // { length: numberOfRows } creates an object with a property 'length' set to the value of the variable 'numberOfRows'
+  // () => [] is the next argument of 'Array.from'. It's a callback function that gets executed for each element in the array structure that was defined in the first argument { length: numberOfRows }
+  // in this case, it returns an empty array [] for each element
 
 let currentPosition = 0;
 let currentRow = 0;
 let gameOver = false;
 let wordOfTheDay; // declare for later, but don't assign a value immediately
-let defaultWordOfTheDay = "abase"; // in case API fetch goes wrong
+let defaultWordOfTheDay = "abase";
 
 // fetch word of the day
 async function fetchWordOfTheDay() {
@@ -31,12 +39,12 @@ async function fetchWordOfTheDay() {
   }
 }
 
-// handle keyboard event
+// a function that takes in the keyboard event as a parameter and extracts the key that was pressed
+
 function handleKeyDown(event) {
   const alertElement = document.querySelector(".alert-enter-valid-letter");
-  const validRegex = /^[a-zA-Z]$/; // only letters can be used for the game
+  const validRegex = /^[a-zA-Z]$/;
 
-  // if key pressed is not backspace and it's not valid a - z, fire screen alert
   if (event.key !== "Backspace" && !validRegex.test(event.key)) {
     alertElement.style.visibility = "visible";
     return; // stop execution if the pressed key is not valid
@@ -45,25 +53,28 @@ function handleKeyDown(event) {
   }
 
   // check to see if key pressed is Backspace && see if the currentPosition is NOT at the beginning && NOT at the end of a row (currentPosition % 5 !== 0)
+  // currentPosition % 5 calculates the remainder when the currentPosition is divided by 5
+
   if (event.key === 'Backspace' && (currentPosition !== 0 && currentPosition % 5 !== 0)) {
     // decrement currentPosition && remove last character from the currentRow
     currentPosition--;
-    rows[currentRow].pop() 
+    rows[currentRow].pop() // retrieves the array (row) at the index specified by currentRow
 
     // grab the previous letter element based on the updated currentPosition
     const previousLetterElement = document.getElementById(
       `letter-${currentPosition}`
     );
 
-    // clear contents of previous letter element, including the background
+    // clear contents of previous letter element
     previousLetterElement.textContent = "";
     previousLetterElement.style.backgroundColor = "";
   } else if (validRegex.test(event.key)) {
     const letter = event.key.toLowerCase();
     playTheGame(letter)
   }
-
+  
   // log the letters being entered in the current row
+  // rows[currentRow]: rows is the array, and currentRow is the variable keeping track of the current row within this array. In other words, rows[currentRow] is used to dynamically access the array representing the current row of guesses
   console.log("rows[currentRow]", rows[currentRow]);
 }
 
@@ -86,7 +97,7 @@ function playTheGame(letter) {
   rows[currentRow].push(letter);
   console.log("ALL ROWS:", rows);
 
-  // if user's letter is in wordOfTheDay, change background to green
+  // check if user's letter is in wordOfTheDay. If true, change background to green
   const letterInWordOfDay = wordOfTheDay.includes(letter);
 
   if (letterInWordOfDay) {
@@ -95,6 +106,7 @@ function playTheGame(letter) {
   currentPosition++; // increment currentPosition
 
   // if the row is filled up, check for a win
+
   if (currentPosition % 5 === 0) {
     checkIfUserWins();
     console.log(`Current Position: ${currentPosition}, Current Row: ${currentRow} of ${numberOfRows}`)
@@ -107,7 +119,7 @@ function checkIfUserWins() {
   console.log("USER WORD", userWord);
 
   if (userWord === wordOfTheDay) {
-    // setTimeout() to ensure last letter appears on the screen before the alert
+    // use setTimeout() to ensure last letter appears on the screen before the alert
     setTimeout(() => {
       alert(`You win!! That's amazing!`);
     }, 20);
@@ -124,7 +136,8 @@ function checkIfUserWins() {
 
 async function init() {
   console.log(`init() called`);
-  wordOfTheDay = await fetchWordOfTheDay(); // fetch wordOfTheDay using await
+
+  wordOfTheDay = await fetchWordOfTheDay(); // fetch word of the day using await
 
   // add event listener and call handleKeyDown
   document.addEventListener("keydown", (event) => handleKeyDown(event));

@@ -4,11 +4,13 @@
 
 [Visit a Live DEMO Here](https://joshhayles.github.io/WordPlay/)
 
-WordPlay is a small project that fetches the word of the day from GET https://words.dev-apis.com/word-of-the-day and allows the user 6 chances to guess it. If they guess a letter correctly, the background turns green. They can use those correct guesses as 'hints' and implement them in their remaining chances as they progress forward in the process.
+See file 'mainWithComments.js' for more comments and notes about the project's code.
 
-If they guess correctly, the row lights up in green.
+WordPlay is a project that fetches the word of the day from GET https://words.dev-apis.com/word-of-the-day and allows the user 6 chances to guess it. If they guess a letter correctly, the background turns green. They can use those correct guesses as 'hints' and implement them in their remaining chances as they progress forward in the process.
 
-Once they run out of chances, and still have not guessed the word, they receive an alert stating they have lost.
+If they guess correctly, the entire row lights up in green.
+
+Once they run out of chances and still have not guessed the word, they receive an alert stating they have lost.
 
 ## 2.0 version (Future Project Additions)
 
