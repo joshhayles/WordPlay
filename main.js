@@ -17,6 +17,7 @@ let currentRow = 0;
 let gameOver = false;
 let wordOfTheDay;
 let defaultWordOfTheDay = "abase";
+let scoreboardLetters = document.querySelectorAll('.scoreboard-letter')
 
 // fetch word of the day
 async function fetchWordOfTheDay() {
@@ -42,41 +43,18 @@ async function fetchWordOfTheDay() {
 
 // a function that takes in the keyboard event as a parameter and extracts the key that was pressed.
 function handleKeyDown(event) {
-  const letterCode = event.code;
+  // console.log(currentRow, "currentRow")
+
+  // const letterCode = event.code;
   const alertElement = document.querySelector(".alert-enter-valid-letter");
+  const validRegex = /^[a-zA-Z]$/;
 
-  // hide the alert initially
-  alertElement.style.visibility = "hidden";
+  alertElement.style.visibility = "hidden"
 
-  if (
-    letterCode === "MetaLeft" ||
-    (letterCode === "AltLeft" && letterCode === "KeyJ")
-  ) {
-    console.log("Devtools Opened");
-  } else if (letterCode === "Backspace") {
-    handleBackspace();
-    // clear alert message if Backspace is pressed
-    alertElement.textContent = "";
-    alertElement.style.visibility = "hidden";
-  } else if (letterCode >= "KeyA" && letterCode <= "KeyZ") {
-    // extract the letter and play the game
-    const letter = event.key.toLowerCase();
-    playTheGame(letter);
-
-    // make sure alert message is cleared when a correct letter is entered
-    alertElement.textContent = "";
-    alertElement.style.visibility = "hidden";
-  } else {
-    alertElement.textContent = "Please enter a valid letter: a - z";
-    alertElement.style.visibility = "visible";
-  }
-}
-
-function handleBackspace() {
-  // check if there is a letter to delete first
-  if (currentPosition > 0) {
+  if (event.key === 'Backspace' && (currentPosition !== 0 && currentPosition % 5 !== 0)) {
     // decrement currentPosition
     currentPosition--;
+    rows[currentRow].pop()
 
     // grab the previous letter element based on the updated currentPosition
     const previousLetterElement = document.getElementById(
@@ -85,11 +63,11 @@ function handleBackspace() {
     // clear contents of previous letter element
     previousLetterElement.textContent = "";
     previousLetterElement.style.backgroundColor = "";
-
-    console.log(`Backspace Position: ${currentPosition}`);
-
-    checkIfUserWins();
+  } else if (validRegex.test(event.key)) {
+    const letter = event.key.toLowerCase();
+    playTheGame(letter)
   }
+  console.log(rows[currentRow], "rows[currentrow]")
 }
 
 // a function for the game's primary logic
@@ -137,19 +115,15 @@ function playTheGame(letter) {
 function checkIfUserWins() {
   // join the letters to form the user's word
   const userWord = rows[currentRow].join("");
-  console.log(userWord);
+  console.log(userWord, "userWord");
 
   if (userWord === wordOfTheDay) {
-    setTimeout(() => {
-      alert(`You win, from checkIfUserWins()`);
-      // set flag to true when user loses the game
-      gameOver = true;
-    }, 50);
+    // set flag to true when user loses the game
+    // gameOver = true;
+    alert(`You win, from checkIfUserWins()`);
   } else if (currentPosition === numberOfRows * 5) {
-    setTimeout(() => {
-      alert(`You lose!`);
-      gameOver = true;
-    }, 50);
+    gameOver = true;
+    alert(`You lose!`);
   } else {
     // Move to the next row
     currentRow++;
