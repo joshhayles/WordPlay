@@ -87,6 +87,8 @@ function handleBackspace() {
     previousLetterElement.style.backgroundColor = "";
 
     console.log(`Backspace Position: ${currentPosition}`);
+
+    checkIfUserWins();
   }
 }
 
