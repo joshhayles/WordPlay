@@ -127,7 +127,7 @@ async function init() {
   wordOfTheDay = await fetchWordOfTheDay(); // fetch wordOfTheDay using await
 
   // add event listener and call handleKeyDown
-  document.addEventListener("keydown", (event) => handleKeyDown(event));
+  document.addEventListener("keydown", handleKeyDown);
 }
 
 init();
