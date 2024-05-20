@@ -2,7 +2,7 @@
 
 ## 1.0 version (Completed Dec, 2023)
 
-[Visit a Live DEMO Here](https://joshhayles.github.io/WordPlay/)
+[Visit a Live DEMO Here](http://s3-wordplay.s3-website.us-east-2.amazonaws.com/)
 
 See file 'mainWithComments.js' for more comments and notes about the project's code.
 
