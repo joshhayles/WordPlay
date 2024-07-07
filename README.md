@@ -1,12 +1,17 @@
 # About WordPlay
 
-## 1.0 version (Completed Dec, 2023)
+## 1.0 version (Completed Jan, 2024)
 
 [Visit a Live DEMO Here](http://s3-wordplay.s3-website.us-east-2.amazonaws.com/)
 
-See file 'mainWithComments.js' for more comments and notes about the project's code.
+WordPlay was built with JavaScript, HTML, and CSS to sharpen my fundamentals in programming, and to have a tangilbe project deployed via AWS.
 
-WordPlay is a project that fetches the word of the day from GET https://words.dev-apis.com/word-of-the-day and allows the user 6 chances to guess it. If they guess a letter correctly, the background turns green. They can use those correct guesses as 'hints' and implement them in their remaining chances as they progress forward in the process.
+Deployment on AWS consisted of the following steps:
+- create S3 bucket with the intention of hosting a static website
+- uploaded the project's files to S3 bucket
+- used the AWS-provided URL to host the Live site!
+
+WordPlay fetches the word of the day from GET https://words.dev-apis.com/word-of-the-day and allows the user 6 chances to guess it. If they guess a letter correctly, the background turns green. They can use those correct guesses as 'hints' and implement them in their remaining chances as they progress forward in the process.
 
 If they guess correctly, the entire row lights up in green.
 
@@ -26,6 +31,8 @@ Once they run out of chances and still have not guessed the word, they receive a
 - Learned a lot about async / await, order of operations, scope, waiting on promises
 
 - I also learned more about Keboard Events, and code values that come from keys being pressed by the user
+
+- See file 'mainWithComments.js' for more comments and notes about the project's code.
 
 # Troubleshooting
 Error in console:
