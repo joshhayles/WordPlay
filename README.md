@@ -4,7 +4,7 @@
 
 [Visit a Live DEMO Here](http://s3-wordplay.s3-website.us-east-2.amazonaws.com/)
 
-WordPlay was built with JavaScript, HTML, and CSS to sharpen my fundamentals in programming, and to have a tangilbe project deployed via AWS.
+WordPlay was built with JavaScript, HTML, and CSS to sharpen my fundamentals in programming, and to have a tangible project deployed via AWS.
 
 Deployment on AWS consisted of the following steps:
 - create S3 bucket with the intention of hosting a static website
